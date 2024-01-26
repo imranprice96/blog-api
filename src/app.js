@@ -12,7 +12,9 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
 const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 app.use("/", indexRouter);
+app.use("/", authRouter);
 
 app.listen(config.server.port, () => {
   console.log(`blog-api listening on port ${config.server.port}`);

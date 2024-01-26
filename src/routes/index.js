@@ -18,7 +18,7 @@ router.get("/posts", post_controller.post_list);
 router.post("/posts", post_controller.post_create);
 
 // GET - fetch single post
-router.get("/posts/post:id", post_controller.post_detail);
+router.get("/posts/:postid", post_controller.post_detail);
 
 // PUT - update a post
 router.put("/posts/:postid", post_controller.post_update);
@@ -27,13 +27,16 @@ router.put("/posts/:postid", post_controller.post_update);
 router.delete("/posts/:postid", post_controller.post_delete);
 
 // GET - fetch all comments for a post
-router.get("/posts/:postid/comments", comment_controller.comments_list);
+router.get("/posts/:postid/comments", comment_controller.comment_list);
 
 // POST - create new comment for a post
 router.post("/posts/:postid", comment_controller.comment_create);
 
 // DELETE - delete a comment
-router.delete("/posts/:postid", comment_controller.comment_delete);
+router.delete(
+  "/posts/:postid/comments/:commentid",
+  comment_controller.comment_delete
+);
 
 module.exports = router;
 
