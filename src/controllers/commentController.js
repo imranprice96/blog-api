@@ -1,8 +1,7 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
 
-// Fetch all comments
-// /posts/:postid/comments
+// GET - fetch all comments for a post
 exports.comment_list = async (req, res, next) => {
   const [post, comments] = await Promise.all([
     Post.findById(req.params.id).exec(),
@@ -15,4 +14,14 @@ exports.comment_list = async (req, res, next) => {
   }
 
   res.json({ post: post, comments: comments });
+};
+
+// POST - create new comment for a post
+exports.comment_create = (req, res, next) => {
+  res.send("not yet implemented");
+};
+
+// DELETE - delete a comment
+exports.comment_delete = (req, res, next) => {
+  res.send("not yet implemented");
 };

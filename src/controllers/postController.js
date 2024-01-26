@@ -1,7 +1,7 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
 
-// Fetch all posts
+// GET - fetch all posts
 // /posts
 exports.post_list = async (req, res, next) => {
   const allPosts = await Post.find().sort({ createdAt: 1 }).exec();
@@ -15,6 +15,7 @@ exports.post_list = async (req, res, next) => {
   res.json({ posts: allPosts });
 };
 
+// POST - create new post
 exports.post_create = async (req, res, next) => {
   const post = new Post({
     title: req.body.title,
@@ -22,4 +23,19 @@ exports.post_create = async (req, res, next) => {
   });
   await post.save();
   res.send(post);
+};
+
+// GET - fetch single post
+exports.post_detail = (req, res, next) => {
+  res.send("not yet implemented");
+};
+
+// PUT - update a post
+exports.post_update = (req, res, next) => {
+  res.send("not yet implemented");
+};
+
+// DELETE - delete a post
+exports.post_delete = (req, res, next) => {
+  res.send("not yet implemented");
 };

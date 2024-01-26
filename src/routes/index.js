@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 const post_controller = require("../controllers/postController");
+const comment_controller = require("../controllers/commentController");
 
 router.use(cors());
 router.use(express.json());
@@ -17,34 +18,22 @@ router.get("/posts", post_controller.post_list);
 router.post("/posts", post_controller.post_create);
 
 // GET - fetch single post
-router.get("/posts/post:id", (req, res) => {
-  res.json({ msg: "to be implemented" });
-});
+router.get("/posts/post:id", post_controller.post_detail);
 
 // PUT - update a post
-router.put("/posts/:postid", (req, res) => {
-  res.json({ msg: "to be implemented" });
-});
+router.put("/posts/:postid", post_controller.post_update);
 
 // DELETE - delete a post
-router.delete("/posts/:postid", (req, res) => {
-  res.json({ msg: "to be implemented" });
-});
+router.delete("/posts/:postid", post_controller.post_delete);
 
 // GET - fetch all comments for a post
-router.get("/posts/:postid/comments", (req, res) => {
-  res.json({ msg: "to be implemented" });
-});
+router.get("/posts/:postid/comments", comment_controller.comments_list);
 
 // POST - create new comment for a post
-router.post("/posts/:postid", (req, res) => {
-  res.json({ msg: "to be implemented" });
-});
+router.post("/posts/:postid", comment_controller.comment_create);
 
 // DELETE - delete a comment
-router.delete("/posts/:postid", (req, res) => {
-  res.json({ msg: "to be implemented" });
-});
+router.delete("/posts/:postid", comment_controller.comment_delete);
 
 module.exports = router;
 
