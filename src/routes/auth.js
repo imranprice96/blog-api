@@ -5,6 +5,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+const validator = require("../config/validators");
+const { validationResult } = require("express-validator");
+
 // User registration
 router.post("/register", async (req, res) => {
   try {
@@ -24,23 +27,30 @@ router.post("/register", async (req, res) => {
 });
 
 // User login
-router.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(401).json({ error: "Authentication failed" });
+router.post("/login", validator.loginValidator, async (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    try {
+      const { username, password } = req.body;
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(401).json({ error: "Authentication failed" });
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: "Authentication failed" });
+      }
+      const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+        expiresIn: "1h",
+      });
+      res.status(200).json({ token });
+    } catch (error) {
+      res.status(500).json({ error: "Login failed" });
     }
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: "Authentication failed" });
-    }
-    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
-    });
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({ error: "Login failed" });
+  } else {
+    res.status(422).json({ errors: errors.array() });
+    return next();
   }
 });
 

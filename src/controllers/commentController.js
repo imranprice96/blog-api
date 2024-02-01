@@ -1,6 +1,9 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
 
+const validator = require("../config/validators");
+const { validationResult } = require("express-validator");
+
 // GET - fetch all comments for a post
 exports.comment_list = async (req, res, next) => {
   try {
@@ -16,21 +19,30 @@ exports.comment_list = async (req, res, next) => {
 };
 
 // POST - create new comment for a post
-exports.comment_create = async (req, res, next) => {
-  try {
-    const comment = new Comment({
-      //validaiton
-      post_id: req.params.postid,
-      username: req.body.username,
-      text: req.body.text,
-    });
-    await comment.save();
-    res.json(comment);
-  } catch (error) {
-    res.send(error);
-    return next();
-  }
-};
+exports.comment_create = [
+  validator.commentValidator,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      try {
+        const comment = new Comment({
+          //validaiton
+          post_id: req.params.postid,
+          username: req.body.username,
+          text: req.body.text,
+        });
+        await comment.save();
+        res.json(comment);
+      } catch (error) {
+        res.send(error);
+        return next();
+      }
+    } else {
+      res.status(422).json({ errors: errors.array() });
+      return next();
+    }
+  },
+];
 
 // DELETE - delete a comment
 exports.comment_delete = async (req, res, next) => {
