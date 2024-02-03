@@ -26,6 +26,7 @@ exports.post_create = [
       const post = new Post({
         title: req.body.title,
         text: req.body.text,
+        published: req.body.published,
       });
       await post.save();
       res.status(200).json({ post });
