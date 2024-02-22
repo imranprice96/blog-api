@@ -8,6 +8,7 @@ require("dotenv").config();
 const validator = require("../config/validators");
 const { validationResult } = require("express-validator");
 
+/*
 // User registration
 router.post("/register", async (req, res) => {
   try {
@@ -25,6 +26,7 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Registration failed" });
   }
 });
+*/
 
 // User login
 router.post("/login", validator.loginValidator, async (req, res, next) => {
